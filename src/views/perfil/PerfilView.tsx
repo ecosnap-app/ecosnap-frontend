@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Boton, Cargando, EnConstruccion, Pantalla } from '../../components';
+import { Boton, Cargando, Pantalla } from '../../components';
 import { usePerfil } from '../../viewmodels/usePerfil';
 import { colores, espacio, radio, tipografia } from '../../theme/tokens';
 
@@ -39,7 +39,6 @@ export default function PerfilView() {
       <Boton variante="peligro" onPress={onSalir}>
         Cerrar sesión
       </Boton>
-      <EnConstruccion nota="Cerrar sesión ya llama al AuthRepository real (HU-03). En el Sprint 4 esa llamada irá a Supabase sin tocar esta vista." />
     </Pantalla>
   );
 }

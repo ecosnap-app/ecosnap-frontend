@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { EnConstruccion, Pantalla } from '../../components';
+import { Pantalla } from '../../components';
 import { colores, espacio, tipografia } from '../../theme/tokens';
 
 const CANECAS = [
@@ -22,7 +22,6 @@ export default function GuiaView() {
           </View>
         </View>
       ))}
-      <EnConstruccion nota="Sprint 3: catálogo local, sin red — como exige la HU-11. Sprint 5: se agrega el buscador de texto." />
     </Pantalla>
   );
 }

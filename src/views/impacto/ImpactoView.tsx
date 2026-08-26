@@ -1,29 +1,51 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { EnConstruccion, Pantalla } from '../../components';
-import { colores, espacio, radio, tipografia } from '../../theme/tokens';
+import { Aviso, Cargando, Pantalla } from '../../components';
+import { useImpacto } from '../../viewmodels/useImpacto';
+import { colores, espacio, tipografia } from '../../theme/tokens';
 
-const BARRAS = [
-  { caneca: 'Blanca', valor: 21, ancho: '58%', color: colores.acento },
-  { caneca: 'Negra', valor: 8, ancho: '22%', color: colores.canecaNegra },
-  { caneca: 'Verde', valor: 5, ancho: '14%', color: colores.canecaVerde },
-  { caneca: 'Especial', valor: 2, ancho: '6%', color: colores.canecaEspecial },
+const CANECAS = [
+  { clave: 'blanca', nombre: 'Blanca', color: colores.acento },
+  { clave: 'negra', nombre: 'Negra', color: colores.canecaNegra },
+  { clave: 'verde', nombre: 'Verde', color: colores.canecaVerde },
+  { clave: 'especial', nombre: 'Especial', color: colores.canecaEspecial },
 ];
 
-/** VIEW 09 — Mi impacto (HU-16). */
+/** VIEW 09 — Mi impacto (HU-16). Los números salen del ViewModel. */
 export default function ImpactoView() {
+  const { conteo, total, cargando, error } = useImpacto();
+
+  if (cargando) return <Cargando mensaje="Calculando tu impacto" />;
+
   return (
-    <Pantalla titulo="Mi impacto" subtitulo="Últimos 7 días">
-      <Text style={e.seccion}>Por caneca</Text>
-      {BARRAS.map((b) => (
-        <View key={b.caneca} style={e.fila}>
-          <Text style={e.clave}>{b.caneca}</Text>
-          <View style={e.riel}>
-            <View style={[e.relleno, { width: b.ancho as `${number}%`, backgroundColor: b.color }]} />
-          </View>
-          <Text style={e.valor}>{b.valor}</Text>
+    <Pantalla titulo="Mi impacto" subtitulo={`${total} residuos clasificados en total`}>
+      {error ? <Aviso mensaje={error} /> : null}
+
+      {total === 0 ? (
+        <View style={e.vacio}>
+          <Text style={e.vacioTitulo}>Todavía no has clasificado nada</Text>
+          <Text style={e.vacioTexto}>
+            Cuando fotografíes tu primer residuo, aquí vas a ver cómo se reparte
+            lo que reciclas entre las cuatro canecas.
+          </Text>
         </View>
-      ))}
-      <EnConstruccion nota="Sprint 3: datos de ejemplo. Sprint 5: se calcula con un GROUP BY sobre la tabla clasificaciones." />
+      ) : (
+        <>
+          <Text style={e.seccion}>Por caneca</Text>
+          {CANECAS.map((c) => {
+            const valor = conteo[c.clave] ?? 0;
+            const ancho = total > 0 ? Math.round((valor / total) * 100) : 0;
+            return (
+              <View key={c.clave} style={e.fila}>
+                <Text style={e.clave}>{c.nombre}</Text>
+                <View style={e.riel}>
+                  <View style={[e.relleno, { width: `${ancho}%`, backgroundColor: c.color }]} />
+                </View>
+                <Text style={e.valor}>{valor}</Text>
+              </View>
+            );
+          })}
+        </>
+      )}
     </Pantalla>
   );
 }
@@ -35,4 +57,7 @@ const e = StyleSheet.create({
   riel: { flex: 1, height: 10, borderRadius: 5, backgroundColor: colores.fondoSuave, overflow: 'hidden' },
   relleno: { height: '100%', borderRadius: 5 },
   valor: { width: 26, textAlign: 'right', fontSize: tipografia.detalle, color: colores.tinta2 },
+  vacio: { flex: 1, justifyContent: 'center', gap: espacio.sm },
+  vacioTitulo: { fontSize: tipografia.subtitulo, fontWeight: '600', color: colores.tinta },
+  vacioTexto: { fontSize: tipografia.cuerpo, color: colores.tinta2, lineHeight: 22 },
 });

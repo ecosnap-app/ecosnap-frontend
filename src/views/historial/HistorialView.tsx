@@ -1,5 +1,5 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native';
-import { Aviso, Cargando, EnConstruccion, Pantalla } from '../../components';
+import { Aviso, Cargando, Pantalla } from '../../components';
 import { ETIQUETAS_CANECA } from '../../models';
 import { useHistorial } from '../../viewmodels/useHistorial';
 import { colores, espacio, tipografia } from '../../theme/tokens';
@@ -18,8 +18,13 @@ export default function HistorialView() {
         keyExtractor={(c) => c.id}
         onEndReached={siguientePagina}
         onEndReachedThreshold={0.4}
-        ListFooterComponent={
-          <EnConstruccion nota="Sprint 3: tres registros de ejemplo con paginación real. Sprint 5: se conecta a la tabla clasificaciones." />
+        ListEmptyComponent={
+          <View style={e.vacio}>
+            <Text style={e.vacioTitulo}>Tu historial está vacío</Text>
+            <Text style={e.vacioTexto}>
+              Cada residuo que clasifiques queda guardado aquí con su caneca y sus puntos.
+            </Text>
+          </View>
         }
         renderItem={({ item }) => (
           <View style={e.fila}>
@@ -46,4 +51,7 @@ const e = StyleSheet.create({
   titulo: { fontSize: tipografia.cuerpo, fontWeight: '600', color: colores.tinta },
   detalle: { fontSize: 12.5, color: colores.tinta3 },
   puntos: { color: colores.acento, fontSize: tipografia.detalle },
+  vacio: { paddingVertical: espacio.xl, gap: espacio.sm },
+  vacioTitulo: { fontSize: tipografia.subtitulo, fontWeight: '600', color: colores.tinta },
+  vacioTexto: { fontSize: tipografia.cuerpo, color: colores.tinta2, lineHeight: 22 },
 });
