@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "EcoSnap",
+    "slug": "ecosnap",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "scheme": "ecosnap",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "backgroundColor": "#0F5D45"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "co.edu.ecosnap.app"
+    },
+    "android": {
+      "package": "co.edu.ecosnap.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#0F5D45",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": ["expo-router", "expo-secure-store"]
+  }
+}
