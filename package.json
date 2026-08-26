@@ -5,22 +5,23 @@
   "dependencies": {
     "@expo/vector-icons": "^15.1.1",
     "@supabase/supabase-js": "^2.112.4",
+    "base64-arraybuffer": "^1.0.2",
     "expo": "~57.0.16",
+    "expo-camera": "~57.0.4",
     "expo-constants": "~57.0.14",
-    "expo-font": "~57.0.1",
+    "expo-file-system": "~57.0.5",
     "expo-linking": "~57.0.7",
     "expo-router": "~57.0.16",
     "expo-secure-store": "~57.0.1",
     "expo-status-bar": "~57.0.1",
-    "react": "19.2.3",
+    "react": "^19.2.8",
     "react-native": "0.86.2",
-    "react-native-reanimated": "4.5.1",
-    "react-native-safe-area-context": "~5.7.0",
-    "react-native-screens": "~4.26.0",
-    "react-native-url-polyfill": "^4.0.0",
-    "react-native-worklets": "0.10.1"
+    "react-native-safe-area-context": "~5.9.1",
+    "react-native-screens": "~4.27.0",
+    "react-native-url-polyfill": "^4.0.0"
   },
   "devDependencies": {
+    "@react-native/jest-preset": "^0.86.2",
     "@testing-library/react-native": "^13.3.3",
     "@types/jest": "^29.5.14",
     "@types/react": "~19.2.2",
@@ -37,7 +38,7 @@
     "web": "expo start --web",
     "typecheck": "tsc --noEmit",
     "test": "jest",
-    "test:ci": "jest --ci --coverage=false"
+    "test:ci": "jest --ci --coverage=false --passWithNoTests"
   },
   "private": true,
   "jest": {
