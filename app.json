@@ -7,10 +7,6 @@
     "icon": "./assets/icon.png",
     "scheme": "ecosnap",
     "userInterfaceStyle": "light",
-    "newArchEnabled": true,
-    "splash": {
-      "backgroundColor": "#0F5D45"
-    },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "co.edu.ecosnap.app"
@@ -30,13 +26,13 @@
     },
     "plugins": [
       "expo-router",
-      "expo-secure-store"
-    ],
-    "extra": {
-      "router": {},
-      "eas": {
-        "projectId": "10c698cd-e4e3-4019-b731-fff6a7816e93"
-      }
-    }
+      "expo-secure-store",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "EcoSnap usa la cámara para identificar el residuo y decirte en qué caneca va."
+        }
+      ]
+    ]
   }
 }
