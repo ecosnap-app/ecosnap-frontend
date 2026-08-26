@@ -1,6 +1,6 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Boton, Cargando, EnConstruccion, Pantalla } from '../../components';
+import { Boton, Cargando, Pantalla } from '../../components';
 import { ETIQUETAS_CANECA } from '../../models';
 import { useInicio } from '../../viewmodels/useInicio';
 import { colores, espacio, radio, tipografia } from '../../theme/tokens';
@@ -13,7 +13,10 @@ export default function InicioView() {
   if (cargando) return <Cargando mensaje="Cargando tus datos" />;
 
   return (
-    <Pantalla titulo={`Hola, ${usuario?.nombre.split(' ')[0] ?? ''}`} subtitulo="Jueves 20 de agosto">
+    <Pantalla
+      titulo={`Hola, ${usuario?.nombre.split(' ')[0] ?? ''}`}
+      subtitulo={usuario?.rachaActual ? `${usuario.rachaActual} días seguidos reciclando` : 'Empieza tu racha hoy'}
+    >
       <ScrollView contentContainerStyle={{ gap: espacio.sm }}>
         <View style={e.tarjeta}>
           <Text style={e.etiqueta}>ECO-PUNTOS</Text>
@@ -28,6 +31,11 @@ export default function InicioView() {
         </Boton>
 
         <Text style={e.seccion}>Lo último que clasificaste</Text>
+        {recientes.length === 0 ? (
+          <Text style={e.vacio}>
+            Todavía no has clasificado nada. Toma la primera foto y empieza a sumar.
+          </Text>
+        ) : null}
         {recientes.map((c) => (
           <View key={c.id} style={e.item}>
             <View style={{ flex: 1 }}>
@@ -42,7 +50,6 @@ export default function InicioView() {
           Ver mi impacto
         </Boton>
 
-        <EnConstruccion nota="Sprint 3: la pantalla ya recibe datos del ViewModel. En el Sprint 4 el usuario vendrá de Supabase en vez del repositorio de demo." />
       </ScrollView>
     </Pantalla>
   );
@@ -72,4 +79,5 @@ const e = StyleSheet.create({
   itemTitulo: { fontSize: tipografia.cuerpo, fontWeight: '600', color: colores.tinta },
   itemDetalle: { fontSize: 12.5, color: colores.tinta3 },
   puntos: { color: colores.acento, fontSize: tipografia.detalle },
+  vacio: { fontSize: tipografia.cuerpo, color: colores.tinta3, lineHeight: 22, paddingVertical: espacio.sm },
 });
