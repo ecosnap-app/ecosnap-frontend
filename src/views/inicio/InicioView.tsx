@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Boton, Cargando, Pantalla } from '../../components';
 import { ETIQUETAS_CANECA } from '../../models';
@@ -30,7 +30,17 @@ export default function InicioView() {
           Clasificar un residuo
         </Boton>
 
-        <Text style={e.seccion}>Lo último que clasificaste</Text>
+        <View style={e.encabezadoSeccion}>
+          <Text style={e.seccion}>Lo último que clasificaste</Text>
+          <Pressable
+            accessibilityRole="link"
+            accessibilityLabel="Ver todo el historial"
+            hitSlop={8}
+            onPress={() => router.navigate('/historial')}
+          >
+            <Text style={e.verTodo}>Ver todo</Text>
+          </Pressable>
+        </View>
         {recientes.length === 0 ? (
           <Text style={e.vacio}>
             Todavía no has clasificado nada. Toma la primera foto y empieza a sumar.
@@ -68,7 +78,14 @@ const e = StyleSheet.create({
     paddingVertical: 6,
   },
   rachaTexto: { color: '#fff', fontSize: tipografia.detalle, fontWeight: '600' },
-  seccion: { fontSize: tipografia.detalle, fontWeight: '600', color: colores.tinta2, marginTop: espacio.sm },
+  seccion: { fontSize: tipografia.detalle, fontWeight: '600', color: colores.tinta2 },
+  encabezadoSeccion: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: espacio.sm,
+  },
+  verTodo: { fontSize: tipografia.detalle, fontWeight: '600', color: colores.acento },
   item: {
     flexDirection: 'row',
     alignItems: 'center',
