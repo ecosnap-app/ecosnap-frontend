@@ -24,6 +24,8 @@ export default function LoginView() {
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
+        textContentType="emailAddress"
+        autoComplete="email"
         placeholder="tucorreo@correo.edu.co"
       />
       <Campo
@@ -31,6 +33,8 @@ export default function LoginView() {
         value={contrasena}
         onChangeText={setContrasena}
         secureTextEntry
+        textContentType="password"
+        autoComplete="password"
         placeholder="Mínimo 8 caracteres"
       />
       <View style={{ height: 8 }} />
