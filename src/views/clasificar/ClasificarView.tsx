@@ -44,7 +44,9 @@ export default function ClasificarView() {
     if (!camara.current || capturando) return;
     setCapturando(true);
     try {
-      const foto = await camara.current.takePictureAsync({ quality: 0.6, skipProcessing: true });
+      // Sin skipProcessing: el módulo nativo aplica la orientación EXIF y la
+      // foto llega derecha a la IA aunque el celular esté de lado (#49).
+      const foto = await camara.current.takePictureAsync({ quality: 0.6 });
       if (!foto?.uri) throw new Error('sin foto');
       router.push('/analizando');
       void clasificar(foto.uri);
