@@ -16,19 +16,23 @@ export class ErrorApi extends Error {
   }
 }
 
-const TIMEOUT_MS = 15000;
+/** Tiempo máximo por defecto. Cada llamada puede pedir otro con `timeoutMs` (#50). */
+const TIMEOUT_POR_DEFECTO_MS = 15000;
 
-export async function pedirApi<T>(
-  ruta: string,
-  opciones: RequestInit & { token?: string } = {}
-): Promise<T> {
+interface OpcionesApi extends RequestInit {
+  token?: string;
+  /** Milisegundos antes de cancelar la petición. Si no se pasa, 15000. */
+  timeoutMs?: number;
+}
+
+export async function pedirApi<T>(ruta: string, opciones: OpcionesApi = {}): Promise<T> {
   if (!env.apiUrl) {
     throw new ErrorApi('Falta EXPO_PUBLIC_API_URL en el archivo .env');
   }
 
-  const { token, headers, ...resto } = opciones;
+  const { token, headers, timeoutMs = TIMEOUT_POR_DEFECTO_MS, ...resto } = opciones;
   const control = new AbortController();
-  const temporizador = setTimeout(() => control.abort(), TIMEOUT_MS);
+  const temporizador = setTimeout(() => control.abort(), timeoutMs);
 
   try {
     const respuesta = await fetch(`${env.apiUrl}${ruta}`, {

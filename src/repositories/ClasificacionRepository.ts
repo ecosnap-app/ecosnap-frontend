@@ -36,6 +36,8 @@ class ClasificacionRepositorySupabase implements ClasificacionRepository {
       method: 'POST',
       token,
       body: JSON.stringify({ imagenBase64 }),
+      // La IA es la llamada más lenta y Render puede tardar ~40 s en despertar.
+      timeoutMs: 45000,
     });
   }
 
