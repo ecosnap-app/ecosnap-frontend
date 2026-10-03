@@ -1,7 +1,7 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { SesionProvider } from '../src/viewmodels/SesionProvider';
+import { SesionProvider, useSesion } from '../src/viewmodels/SesionProvider';
 
 /**
  * Layout raíz de la aplicación.
@@ -14,12 +14,31 @@ export default function LayoutRaiz() {
     <SafeAreaProvider>
       <SesionProvider>
         <StatusBar style="dark" />
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="index" />
-          <Stack.Screen name="(auth)" />
-          <Stack.Screen name="(app)" />
-        </Stack>
+        <Rutas />
       </SesionProvider>
     </SafeAreaProvider>
+  );
+}
+
+/**
+ * #46: grupos protegidos de Expo Router.
+ *
+ * Con sesión solo existe (app); sin sesión solo existe (auth). Al cerrar
+ * sesión, Expo Router saca del historial todas las pantallas de (app), así
+ * que el botón "atrás" de Android ya no puede volver a ellas.
+ */
+function Rutas() {
+  const { sesion } = useSesion();
+
+  return (
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="index" />
+      <Stack.Protected guard={!sesion}>
+        <Stack.Screen name="(auth)" />
+      </Stack.Protected>
+      <Stack.Protected guard={!!sesion}>
+        <Stack.Screen name="(app)" />
+      </Stack.Protected>
+    </Stack>
   );
 }
