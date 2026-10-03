@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, RefreshControl, StyleSheet, Text, View } from 'react-native';
 import { Aviso, Cargando, Pantalla } from '../../components';
 import { ETIQUETAS_CANECA } from '../../models';
 import { useHistorial } from '../../viewmodels/useHistorial';
@@ -6,7 +6,7 @@ import { colores, espacio, tipografia } from '../../theme/tokens';
 
 /** VIEW 08 — Historial (HU-15). */
 export default function HistorialView() {
-  const { items, cargando, error, siguientePagina } = useHistorial();
+  const { items, cargando, error, siguientePagina, refrescando, refrescar } = useHistorial();
 
   if (cargando && items.length === 0) return <Cargando mensaje="Cargando tu historial" />;
 
@@ -18,6 +18,14 @@ export default function HistorialView() {
         keyExtractor={(c) => c.id}
         onEndReached={siguientePagina}
         onEndReachedThreshold={0.4}
+        refreshControl={
+          <RefreshControl
+            refreshing={refrescando}
+            onRefresh={refrescar}
+            colors={[colores.acento]}
+            tintColor={colores.acento}
+          />
+        }
         ListEmptyComponent={
           <View style={e.vacio}>
             <Text style={e.vacioTitulo}>Tu historial está vacío</Text>
