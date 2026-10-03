@@ -66,12 +66,16 @@ class ClasificacionRepositorySupabase implements ClasificacionRepository {
       const { error } = await supabase.storage
         .from('residuos')
         .upload(ruta, decode(base64), { contentType: 'image/jpeg', upsert: false });
-      if (!error) {
+      if (error) {
+        console.error('[ClasificacionRepository.guardar] Storage rechazó la foto:', error.message);
+      } else {
         fotoUrl = supabase.storage.from('residuos').getPublicUrl(ruta).data.publicUrl;
       }
-    } catch {
+    } catch (e) {
       // Si la foto no se puede subir, igual guardamos la clasificación:
       // perder la miniatura duele menos que perder los puntos del usuario.
+      // Pero el error queda registrado para poder depurarlo (#40).
+      console.error('[ClasificacionRepository.guardar] No se pudo subir la foto:', e);
     }
 
     const { error } = await supabase.rpc('registrar_clasificacion', {
