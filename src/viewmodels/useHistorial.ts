@@ -11,6 +11,7 @@ export function useHistorial() {
   const [hayMas, setHayMas] = useState(true);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [refrescando, setRefrescando] = useState(false);
 
   const cargarPagina = useCallback(
     async (p: number) => {
@@ -41,5 +42,14 @@ export function useHistorial() {
     void cargarPagina(p);
   }, [cargando, hayMas, pagina, cargarPagina]);
 
-  return { items, cargando, error, hayMas, siguientePagina };
+  /** #38: pull-to-refresh. Reinicia la paginación y vuelve a pedir la página 0. */
+  const refrescar = useCallback(async () => {
+    setRefrescando(true);
+    setPagina(0);
+    setHayMas(true);
+    await cargarPagina(0);
+    setRefrescando(false);
+  }, [cargarPagina]);
+
+  return { items, cargando, error, hayMas, siguientePagina, refrescando, refrescar };
 }
