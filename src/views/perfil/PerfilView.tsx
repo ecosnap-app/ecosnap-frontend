@@ -12,8 +12,9 @@ export default function PerfilView() {
   if (cargando) return <Cargando />;
 
   async function onSalir() {
+    // No navegamos a mano: al quedar sin sesión, el layout raíz retira las
+    // rutas protegidas y Expo Router lleva al usuario a Bienvenida (#46).
     await cerrarSesion();
-    router.replace('/bienvenida');
   }
 
   return (
