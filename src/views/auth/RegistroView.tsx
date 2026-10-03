@@ -26,12 +26,16 @@ export default function RegistroView() {
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
+        textContentType="emailAddress"
+        autoComplete="email"
       />
       <Campo
         etiqueta="Contraseña"
         value={contrasena}
         onChangeText={setContrasena}
         secureTextEntry
+        textContentType="newPassword"
+        autoComplete="new-password"
         ayuda="Mínimo 8 caracteres."
       />
       <View style={{ height: 8 }} />
