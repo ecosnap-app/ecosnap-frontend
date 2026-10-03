@@ -11,15 +11,23 @@ export default function RegistroView() {
   const [nombre, setNombre] = useState('');
   const [email, setEmail] = useState('');
   const [contrasena, setContrasena] = useState('');
+  const [confirmacion, setConfirmacion] = useState('');
+  const [errorLocal, setErrorLocal] = useState<string | null>(null);
 
   async function onRegistrar() {
+    // #30: no se llama al registro si las dos contraseñas no son iguales
+    if (contrasena !== confirmacion) {
+      setErrorLocal('Las contraseñas no coinciden.');
+      return;
+    }
+    setErrorLocal(null);
     const ok = await registrar(nombre.trim(), email.trim(), contrasena);
     if (ok) router.replace('/inicio');
   }
 
   return (
     <Pantalla titulo="Crear cuenta" subtitulo="Tus puntos quedan guardados en la nube">
-      {error ? <Aviso mensaje={error} /> : null}
+      {errorLocal || error ? <Aviso mensaje={errorLocal ?? error ?? ''} /> : null}
       <Campo etiqueta="Nombre" value={nombre} onChangeText={setNombre} autoCapitalize="words" />
       <Campo
         etiqueta="Correo"
@@ -37,6 +45,14 @@ export default function RegistroView() {
         textContentType="newPassword"
         autoComplete="new-password"
         ayuda="Mínimo 8 caracteres."
+      />
+      <Campo
+        etiqueta="Confirmar contraseña"
+        value={confirmacion}
+        onChangeText={setConfirmacion}
+        secureTextEntry
+        textContentType="newPassword"
+        autoComplete="new-password"
       />
       <View style={{ height: 8 }} />
       <Boton onPress={onRegistrar} cargando={cargando}>
