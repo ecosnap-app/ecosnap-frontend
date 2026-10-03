@@ -115,6 +115,27 @@ export function Cargando({ mensaje }: { mensaje?: string }) {
   );
 }
 
+/**
+ * #35: estado vacío reutilizable. Lo usan Historial, Ranking e Impacto
+ * en vez de repetir la misma estructura y los mismos estilos.
+ */
+export function EmptyState({
+  titulo,
+  texto,
+  centrado = false,
+}: {
+  titulo: string;
+  texto: string;
+  centrado?: boolean;
+}) {
+  return (
+    <View style={[e.vacio, centrado && e.vacioCentrado]}>
+      <Text style={e.vacioTitulo}>{titulo}</Text>
+      <Text style={e.vacioTexto}>{texto}</Text>
+    </View>
+  );
+}
+
 /** Marca visual de que la pantalla está en construcción (Sprint 3). */
 export function EnConstruccion({ nota }: { nota: string }) {
   return (
@@ -170,6 +191,11 @@ const e = StyleSheet.create({
 
   centrado: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: espacio.sm },
   cargandoTexto: { color: colores.tinta3, fontSize: tipografia.detalle },
+
+  vacio: { paddingVertical: espacio.xl, gap: espacio.sm },
+  vacioCentrado: { flex: 1, justifyContent: 'center', paddingVertical: 0 },
+  vacioTitulo: { fontSize: tipografia.subtitulo, fontWeight: '600', color: colores.tinta },
+  vacioTexto: { fontSize: tipografia.cuerpo, color: colores.tinta2, lineHeight: 22 },
 
   construccion: {
     borderWidth: 1,

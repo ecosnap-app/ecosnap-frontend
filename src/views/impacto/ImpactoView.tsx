@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { Aviso, Cargando, Pantalla } from '../../components';
+import { Aviso, Cargando, EmptyState, Pantalla } from '../../components';
 import { useImpacto } from '../../viewmodels/useImpacto';
 import { colores, espacio, tipografia } from '../../theme/tokens';
 
@@ -21,13 +21,11 @@ export default function ImpactoView() {
       {error ? <Aviso mensaje={error} /> : null}
 
       {total === 0 ? (
-        <View style={e.vacio}>
-          <Text style={e.vacioTitulo}>Todavía no has clasificado nada</Text>
-          <Text style={e.vacioTexto}>
-            Cuando fotografíes tu primer residuo, aquí vas a ver cómo se reparte
-            lo que reciclas entre las cuatro canecas.
-          </Text>
-        </View>
+        <EmptyState
+          centrado
+          titulo="Todavía no has clasificado nada"
+          texto="Cuando fotografíes tu primer residuo, aquí vas a ver cómo se reparte lo que reciclas entre las cuatro canecas."
+        />
       ) : (
         <>
           <Text style={e.seccion}>Por caneca</Text>
@@ -57,7 +55,4 @@ const e = StyleSheet.create({
   riel: { flex: 1, height: 10, borderRadius: 5, backgroundColor: colores.fondoSuave, overflow: 'hidden' },
   relleno: { height: '100%', borderRadius: 5 },
   valor: { width: 26, textAlign: 'right', fontSize: tipografia.detalle, color: colores.tinta2 },
-  vacio: { flex: 1, justifyContent: 'center', gap: espacio.sm },
-  vacioTitulo: { fontSize: tipografia.subtitulo, fontWeight: '600', color: colores.tinta },
-  vacioTexto: { fontSize: tipografia.cuerpo, color: colores.tinta2, lineHeight: 22 },
 });
