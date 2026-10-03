@@ -15,18 +15,20 @@ export function useRanking() {
     if (!sesion) return;
     setCargando(true);
     setError(null);
-    try {
-      const [lista, mio] = await Promise.all([
-        usuarioRepository.ranking(),
-        usuarioRepository.miPosicion(sesion.usuarioId),
-      ]);
-      setTop(lista);
-      setMiPuesto(mio);
-    } catch {
+    // allSettled y no all: si falla "mi posición", el ranking público
+    // se muestra igual (#41). Cada promesa se evalúa por separado.
+    const [lista, mio] = await Promise.allSettled([
+      usuarioRepository.ranking(),
+      usuarioRepository.miPosicion(sesion.usuarioId),
+    ]);
+
+    if (lista.status === 'fulfilled') {
+      setTop(lista.value);
+    } else {
       setError('No pudimos cargar el ranking.');
-    } finally {
-      setCargando(false);
     }
+    setMiPuesto(mio.status === 'fulfilled' ? mio.value : null);
+    setCargando(false);
   }, [sesion]);
 
   useEffect(() => {
