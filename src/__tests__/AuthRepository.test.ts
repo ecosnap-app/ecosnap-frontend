@@ -1,4 +1,4 @@
-import { authRepository } from '../repositories/AuthRepository';
+import { authRepository, esCorreoValido } from '../repositories/AuthRepository';
 
 /**
  * Pruebas del repositorio de autenticación (HU-01, HU-02, HU-03).
@@ -49,5 +49,19 @@ describe('AuthRepository', () => {
       'clave12345'
     );
     expect(sesion.email).toBe('nuevo@correo.edu.co');
+  });
+
+  it('valida el formato del correo (#36)', () => {
+    expect(esCorreoValido('brandon@correo.edu.co')).toBe(true);
+    expect(esCorreoValido('a@b')).toBe(false);
+    expect(esCorreoValido('@correo.com')).toBe(false);
+    expect(esCorreoValido('brandon@correo.')).toBe(false);
+    expect(esCorreoValido('bran don@correo.com')).toBe(false);
+  });
+
+  it('el registro rechaza un correo mal escrito (#36)', async () => {
+    await expect(
+      authRepository.registrar('Brandon', 'brandon@correo', 'clave12345')
+    ).rejects.toThrow('correo válido');
   });
 });

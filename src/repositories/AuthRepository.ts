@@ -24,6 +24,16 @@ export interface AuthRepository {
 
 const esperar = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
+/**
+ * Formato de correo: algo@dominio.extension, sin espacios.
+ * Exige usuario, dominio y una extensión de al menos 2 letras.
+ */
+const FORMATO_CORREO = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
+
+export function esCorreoValido(email: string): boolean {
+  return FORMATO_CORREO.test(email.trim());
+}
+
 class AuthRepositoryDemo implements AuthRepository {
   private sesion: Sesion | null = null;
 
@@ -34,7 +44,7 @@ class AuthRepositoryDemo implements AuthRepository {
 
   async entrar(email: string, contrasena: string): Promise<Sesion> {
     await esperar(600);
-    if (!email.includes('@') || contrasena.length < 8) {
+    if (!esCorreoValido(email) || contrasena.length < 8) {
       throw new Error('Correo o contraseña incorrectos.');
     }
     this.sesion = { usuarioId: 'demo-1', email, token: 'token-de-demo' };
@@ -43,6 +53,9 @@ class AuthRepositoryDemo implements AuthRepository {
 
   async registrar(_nombre: string, email: string, contrasena: string): Promise<Sesion> {
     await esperar(600);
+    if (!esCorreoValido(email)) {
+      throw new Error('Escribe un correo válido, por ejemplo nombre@correo.com.');
+    }
     if (contrasena.length < 8) {
       throw new Error('La contraseña debe tener al menos 8 caracteres.');
     }
