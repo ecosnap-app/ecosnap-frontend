@@ -1,7 +1,8 @@
 import { useRef, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
-import { CameraView, useCameraPermissions } from 'expo-camera';
+import { CameraView, useCameraPermissions, type CameraType, type FlashMode } from 'expo-camera';
+import { Ionicons } from '@expo/vector-icons';
 import { Boton, Cargando, Pantalla } from '../../components';
 import { useClasificacion } from '../../viewmodels/ClasificacionProvider';
 import { colores, espacio, radio, tipografia } from '../../theme/tokens';
@@ -18,6 +19,9 @@ export default function ClasificarView() {
   const [permiso, pedirPermiso] = useCameraPermissions();
   const camara = useRef<CameraView>(null);
   const [capturando, setCapturando] = useState(false);
+  // #47: cámara trasera/frontal y flash, guardados en el estado de la vista
+  const [lado, setLado] = useState<CameraType>('back');
+  const [flash, setFlash] = useState<FlashMode>('off');
 
   // Todavía no sabemos si hay permiso
   if (!permiso) return <Cargando />;
@@ -58,16 +62,36 @@ export default function ClasificarView() {
   return (
     <Pantalla titulo="Clasificar" subtitulo="Centra el residuo en el marco">
       <View style={e.visor}>
-        <CameraView ref={camara} style={StyleSheet.absoluteFill} facing="back" />
+        <CameraView ref={camara} style={StyleSheet.absoluteFill} facing={lado} flash={flash} />
         <View style={e.marco} pointerEvents="none" />
       </View>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel="Tomar la foto"
-        onPress={tomarFoto}
-        disabled={capturando}
-        style={({ pressed }) => [e.disparador, (pressed || capturando) && { opacity: 0.6 }]}
-      />
+      <View style={e.controles}>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={flash === 'on' ? 'Apagar el flash' : 'Encender el flash'}
+          onPress={() => setFlash((f) => (f === 'on' ? 'off' : 'on'))}
+          style={e.control}
+        >
+          <Ionicons name={flash === 'on' ? 'flash' : 'flash-off'} size={24} color={colores.acento} />
+        </Pressable>
+
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Tomar la foto"
+          onPress={tomarFoto}
+          disabled={capturando}
+          style={({ pressed }) => [e.disparador, (pressed || capturando) && { opacity: 0.6 }]}
+        />
+
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Cambiar de cámara"
+          onPress={() => setLado((l) => (l === 'back' ? 'front' : 'back'))}
+          style={e.control}
+        >
+          <Ionicons name="camera-reverse-outline" size={26} color={colores.acento} />
+        </Pressable>
+      </View>
     </Pantalla>
   );
 }
@@ -91,14 +115,26 @@ const e = StyleSheet.create({
     borderStyle: 'dashed',
     borderRadius: radio.lg,
   },
+  controles: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    marginTop: espacio.md,
+  },
+  control: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colores.acentoSuave,
+  },
   disparador: {
-    alignSelf: 'center',
     width: 72,
     height: 72,
     borderRadius: 36,
     backgroundColor: '#fff',
     borderWidth: 5,
     borderColor: colores.acentoSuave,
-    marginTop: espacio.md,
   },
 });
