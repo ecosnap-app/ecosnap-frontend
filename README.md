@@ -2,7 +2,9 @@
 
 Proyecto del curso **Mobile Cloud Computing (IS0249 - 210)**, Ingeniería de Sistemas.
 
-**Equipo:** Brandon Linares, Sarihat y Adriana. · **Docente:** `endijromero`
+**Equipo:** Brandon Felipe Linares Viasus, Sariath Eyleen Xiomara Ariza Vargas y Adriana Lucia Carreño Medina. · **Docente:** `endijromero`
+
+**Tablero Kanban:** [GitHub Projects de ecosnap-app](https://github.com/orgs/ecosnap-app/projects) · **Sprint Review del Corte II:** [SPRINT_REVIEW_CORTE2.md](SPRINT_REVIEW_CORTE2.md) · **Video de la demo:** [YouTube](https://youtu.be/a9w89JDSXn8)
 
 La visión del proyecto, el problema y el stack están en el pitch de la organización.
 Este repositorio contiene la aplicación móvil.
@@ -105,6 +107,9 @@ dependen de la interfaz, se pueden probar sin renderizar una sola pantalla.
 | 2 | Prototipo en Figma y diagrama de arquitectura |
 | 3 | Este esqueleto: 12 pantallas conectadas y APK instalable |
 | 4 | Autenticación real con Supabase |
+| Taller 5 | 13 bugs e issues del docente corregidos, una rama y un PR por issue |
+| Taller 6 | Base de datos en Supabase: tablas, trigger, función de registro, RLS y Storage ([ecosnap-backend](https://github.com/ecosnap-app/ecosnap-backend)) |
+| Taller 7 | Sprint Review del Corte II: app conectada a la base real y APK en [Releases](https://github.com/ecosnap-app/ecosnap-frontend/releases) |
 
 ## Pantallas
 
