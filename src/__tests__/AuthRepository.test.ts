@@ -1,4 +1,4 @@
-import { authRepository, esCorreoValido } from '../repositories/AuthRepository';
+import { authRepository, esCorreoValido, validarRegistro } from '../repositories/AuthRepository';
 
 /**
  * Pruebas del repositorio de autenticación (HU-01, HU-02, HU-03).
@@ -57,6 +57,12 @@ describe('AuthRepository', () => {
     expect(esCorreoValido('@correo.com')).toBe(false);
     expect(esCorreoValido('brandon@correo.')).toBe(false);
     expect(esCorreoValido('bran don@correo.com')).toBe(false);
+  });
+
+  it('las reglas del registro son las mismas con o sin Supabase (#36)', () => {
+    expect(validarRegistro('brandon@correo.edu.co', 'clave12345')).toBeNull();
+    expect(validarRegistro('brandon@correo', 'clave12345')).toContain('correo válido');
+    expect(validarRegistro('brandon@correo.edu.co', 'corta')).toContain('8 caracteres');
   });
 
   it('el registro rechaza un correo mal escrito (#36)', async () => {
