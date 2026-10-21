@@ -34,6 +34,18 @@ export function esCorreoValido(email: string): boolean {
   return FORMATO_CORREO.test(email.trim());
 }
 
+const MENSAJE_CORREO = 'Escribe un correo válido, por ejemplo nombre@correo.com.';
+
+/**
+ * Reglas del registro, las mismas en modo demo y con Supabase (#36).
+ * Devuelve el mensaje de error, o null si los datos están bien.
+ */
+export function validarRegistro(email: string, contrasena: string): string | null {
+  if (!esCorreoValido(email)) return MENSAJE_CORREO;
+  if (contrasena.length < 8) return 'La contraseña debe tener al menos 8 caracteres.';
+  return null;
+}
+
 class AuthRepositoryDemo implements AuthRepository {
   private sesion: Sesion | null = null;
 
@@ -53,12 +65,8 @@ class AuthRepositoryDemo implements AuthRepository {
 
   async registrar(_nombre: string, email: string, contrasena: string): Promise<Sesion> {
     await esperar(600);
-    if (!esCorreoValido(email)) {
-      throw new Error('Escribe un correo válido, por ejemplo nombre@correo.com.');
-    }
-    if (contrasena.length < 8) {
-      throw new Error('La contraseña debe tener al menos 8 caracteres.');
-    }
+    const invalido = validarRegistro(email, contrasena);
+    if (invalido) throw new Error(invalido);
     this.sesion = { usuarioId: 'demo-1', email, token: 'token-de-demo' };
     return this.sesion;
   }
@@ -90,6 +98,8 @@ class AuthRepositorySupabase implements AuthRepository {
   }
 
   async entrar(email: string, contrasena: string): Promise<Sesion> {
+    // #36: el formato se revisa antes de ir a la nube, igual que en el demo
+    if (!esCorreoValido(email)) throw new Error(MENSAJE_CORREO);
     const { data, error } = await supabase!.auth.signInWithPassword({
       email,
       password: contrasena,
@@ -105,6 +115,9 @@ class AuthRepositorySupabase implements AuthRepository {
   }
 
   async registrar(nombre: string, email: string, contrasena: string): Promise<Sesion> {
+    // #36: antes esta validación solo corría en modo demo
+    const invalido = validarRegistro(email, contrasena);
+    if (invalido) throw new Error(invalido);
     const { data, error } = await supabase!.auth.signUp({
       email,
       password: contrasena,
